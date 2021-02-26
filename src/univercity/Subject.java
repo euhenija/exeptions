@@ -1,4 +1,4 @@
-package Univercity;
+package univercity;
 
 import Enums.SubjectName;
 

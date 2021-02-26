@@ -1,4 +1,4 @@
-package Univercity;
+package univercity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
