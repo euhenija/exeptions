@@ -1,6 +1,6 @@
-package univercity;
+package university;
 
-import Enums.SubjectName;
+import enums.SubjectName;
 
 import java.util.Objects;
 
@@ -14,6 +14,7 @@ public class Subject {
 
 
     public SubjectName getSubjectName() {
+
         return subjectName;
     }
 

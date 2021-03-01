@@ -1,46 +1,119 @@
 
-import univercity.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import exceptions.Inspector;
+import exceptions.MarkIsOutOfBoundException;
+import university.*;
+
+import java.util.*;
 
 
 public class AcademicPerformanceManager {
-    private Univercity univercity;
+    private University university;
+    private Faculty faculty;
+    Collection<Faculty> listOfAllFaculties;
+    HashMap<String, Faculty> mapOfAllFaculties;
 
-    public AcademicPerformanceManager(Univercity univercity) {
-        this.univercity = univercity;
+
+
+    public AcademicPerformanceManager(University university) {
+
+        this.university = university;
     }
 
-    public double getAverageMarkOnSubjectForGroup(String facultyName, int groupNumber) {
-        Map<String, HashMap<String, Faculty>> faculties = univercity.getUnivercity();
-        Collection<HashMap<String, Faculty>> listOfFacultie = faculties.values();
+    public int getAverageMarkOfGroup(String facultyName, int groupNumber, Subject subject){
+        try {
+            mapOfAllFaculties = university.getUniversity();
+            faculty = university.getUniversity().get(facultyName);
 
-        int averageMarkforGroup = 0;
-        return averageMarkforGroup;
+        } catch (NullPointerException e) {
+            System.out.println("No faculties in University "+university.getUniversityName());
+            return 0;
+        }
+        HashMap<String, Student> listOfStudentsFromGroup = faculty.getMapOfFacultyGroups().get(groupNumber).getStudentsOfGroup();
+        Collection<Student> students = listOfStudentsFromGroup.values();
+        Inspector markInspector = new Inspector();
+        int totalSumOfMarks = 0;
+        int quantityOfStudentsWithSubject = 0;
+        for (Student student : students) {
+            HashMap<Subject, Integer> listOfStudentSubjects = student.getListOfSubjects();
+            if (listOfStudentSubjects.containsKey(subject)) {
+                int subjectMark = listOfStudentSubjects.get(subject);
+                try {
+                    markInspector.checkTheMark(subjectMark);
+                } catch (MarkIsOutOfBoundException e) {
+                    System.out.println(e.toString() + ": Student  " + student.getStudentName() + " " + student.getStudentSurname() + " has unacceptable mark on " + subject.getSubjectName());
+                }
+                totalSumOfMarks += subjectMark;
+                quantityOfStudentsWithSubject++;
+            }
+        }
+        return totalSumOfMarks / quantityOfStudentsWithSubject;
     }
-//   public double getAverageMarkOnSubjectForGroup(String facultyName, int groupNumber) {
-//        int totalSumOfMarks = 0;
-//       int quantityOfStudentsSubjects = 0;
-////        ArrayList<Faculty> faculties = univercity.getListOfFaculties();
-////        for (Faculty faculty : faculties) {
-////            ArrayList<Group> groups = faculty.getFacultyGroupList();
-//            for (Group group : groups) {
-//                ArrayList<Student> students = group.getStudentsfromGroup();
-//                for (Student student : students) {
-//                    if (student.getStudentName().equals(studentName) && student.getStudentSurname().equals(studentSurname)) {
-//                        HashMap<Subject, Integer> listOfStudentSubjects = student.getListOfSubjects();
-//                        for (int mark : listOfStudentSubjects.values()) {
-//                            totalSumOfMarks += mark;
-//                            quantityOfStudentsSubjects++;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        double averageMark=totalSumOfMarks/quantityOfStudentsSubjects;
-//        return averageMark;
+
+    public float getStudentAverageMark(String studentSurname) {
+
+        try{
+            listOfAllFaculties = university.getUniversity().values();
+        }
+        catch (NullPointerException e){
+            System.out.println("No faculties in University "+university.getUniversityName());
+            return 0;
+        }
+        Map<Integer, Group> mapOfAllUniversityGroups = new HashMap<>();
+        for (Faculty faculty : listOfAllFaculties) {
+            mapOfAllUniversityGroups.putAll(faculty.getMapOfFacultyGroups());
+        }
+        HashMap<String, Student> mapOfAllUniversityStudents = new HashMap<>();
+        for (Group group : mapOfAllUniversityGroups.values()) {
+            mapOfAllUniversityStudents.putAll(group.getStudentsOfGroup());
+        }
+        int totalSumOfMarks = 0;
+        int quantityOfStudentsSubjects = 0;
+        if (mapOfAllUniversityStudents.containsKey(studentSurname)) {
+            Student selectedStudent = mapOfAllUniversityStudents.get(studentSurname);
+            Collection<Integer> listOfStudentMarks = selectedStudent.getListOfSubjects().values();
+            try {    if (listOfStudentMarks.size()==0){
+                    throw new NullPointerException();
+                }
+            }
+            catch (NullPointerException e){
+                System.out.println("Student "+selectedStudent.getStudentName()+" "+selectedStudent.getStudentSurname()+" has no subjects!");
+            return 0;
+            }
+            for (Integer mark : listOfStudentMarks) {
+                totalSumOfMarks += mark;
+                quantityOfStudentsSubjects++;
+            }
+        }
+        return totalSumOfMarks / quantityOfStudentsSubjects;
     }
+
+    public float getUniversityAverageMark(Subject subject) {
+        listOfAllFaculties = university.getUniversity().values();
+        Map<Integer, Group> mapOfAllFaculties = new HashMap<>();
+        for (Faculty faculty : listOfAllFaculties) {
+            mapOfAllFaculties.putAll(faculty.getMapOfFacultyGroups());
+        }
+        Collection<Student> listOfAllStudents = new ArrayList<>();
+        for (Group group : mapOfAllFaculties.values()) {
+            listOfAllStudents.addAll(group.getStudentsOfGroup().values());
+        }
+        int totalSum = 0;
+        int quantityOfStudentsLearnThisSubject = 0;
+        for (Student student : listOfAllStudents) {
+            HashMap<Subject, Integer> listOfStudentSubjects = student.getListOfSubjects();
+            if (listOfStudentSubjects.containsKey(subject)) {
+                totalSum += listOfStudentSubjects.get(subject);
+                quantityOfStudentsLearnThisSubject++;
+            }
+        }
+        return totalSum / quantityOfStudentsLearnThisSubject;
+    }
+}
+
+
+
+
+
+
 
 
