@@ -1,5 +1,10 @@
 package university;
 
+import exceptions.GroupHasNoStudentsException;
+import exceptions.Inspector;
+import exceptions.MarkIsOutOfBoundException;
+import exceptions.StudentHasNoSubjectsException;
+
 import java.util.HashMap;
 
 public class Group {
@@ -11,11 +16,15 @@ public class Group {
         return groupNumber;
     }
 
-    public HashMap<String, Student> getStudentsOfGroup() {
+    public HashMap<String, Student> getStudentsOfGroup() throws GroupHasNoStudentsException {
+        if (studentsOfGroup.isEmpty()) {
+            throw new GroupHasNoStudentsException();
+        }
         return studentsOfGroup;
     }
 
     public void addStudentsToGroup(HashMap<String, Student> studentsOfGroup) {
+
         this.studentsOfGroup = studentsOfGroup;
     }
 
@@ -25,5 +34,24 @@ public class Group {
 
     public void addStudent(String surname, Student student) {
         studentsOfGroup.put(surname, student);
+    }
+
+    public int getGroupAverageMark(String subjectName) throws StudentHasNoSubjectsException, MarkIsOutOfBoundException {
+        int totalSumOfMarks = 0;
+        int quantityOfStudentsWithSubjectInGroup = 0;
+        Inspector markInspector = new Inspector();
+        for (Student student : studentsOfGroup.values()) {
+            HashMap<String, Integer> list = student.getListOfSubjects();
+            if (student.getListOfSubjects().containsKey(subjectName)) {
+                markInspector.checkTheMark(list.get(subjectName));
+                totalSumOfMarks += list.get(subjectName);
+                quantityOfStudentsWithSubjectInGroup++;
+            }
+        }
+        if (quantityOfStudentsWithSubjectInGroup == 0) {
+            return 0;
+        } else {
+            return totalSumOfMarks / quantityOfStudentsWithSubjectInGroup;
+        }
     }
 }

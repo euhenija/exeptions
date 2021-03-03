@@ -1,16 +1,21 @@
 package university;
 
-import java.util.ArrayList;
+import exceptions.Inspector;
+import exceptions.MarkIsOutOfBoundException;
+import exceptions.StudentHasNoSubjectsException;
 import java.util.HashMap;
-import java.util.Objects;
+
 
 public class Student {
     private String studentName;
     private String studentSurname;
-    private HashMap<Subject, Integer> listOfSubjects = new HashMap();
+    private HashMap<String, Integer> listOfSubjects = new HashMap();
+    private int studentAverageMark;
 
-
-    public HashMap<Subject, Integer> getListOfSubjects() {
+    public HashMap<String, Integer> getListOfSubjects() throws StudentHasNoSubjectsException {
+        if (listOfSubjects.isEmpty()){
+            throw new StudentHasNoSubjectsException();
+        }
         return listOfSubjects;
     }
 
@@ -39,14 +44,27 @@ public class Student {
             return this;
         }
 
-        public StudentBuilder withSubjectAndItsMark(Subject subject, int mark) {
-            newStudent.listOfSubjects.put(subject, mark);
+        public StudentBuilder withSubjectAndItsMark(String subjectName, int mark) {
+            newStudent.listOfSubjects.put(subjectName, mark);
             return this;
         }
 
         public Student build() {
             return newStudent;
         }
+    }
+
+    public int getStudentsAverageMark() throws MarkIsOutOfBoundException {
+        int totalSumOfMarks = 0;
+        int quantityOfStudentsSubjects = 0;
+        Inspector markInspector = new Inspector();
+        for (Integer mark : listOfSubjects.values()) {
+            markInspector.checkTheMark(mark);
+            totalSumOfMarks += mark;
+            quantityOfStudentsSubjects++;
+        }
+        studentAverageMark = totalSumOfMarks / quantityOfStudentsSubjects;
+        return studentAverageMark;
     }
 
     @Override
