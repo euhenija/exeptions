@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class University {
+
     private String universityName;
     private HashMap<String, Faculty> mapOfFaculties;
 
@@ -16,14 +17,11 @@ public class University {
         return universityName;
     }
 
-    public void setuniversityName(String universityName) {
+    public void setUniversityName(String universityName) {
         this.universityName = universityName;
     }
 
     public HashMap<String, Faculty> getMapOfFaculties() throws UniversityHasNoFacultiesException {
-        if (mapOfFaculties.isEmpty()) {
-            throw new UniversityHasNoFacultiesException();
-        }
         return mapOfFaculties;
     }
 
@@ -31,8 +29,10 @@ public class University {
         this.mapOfFaculties = university;
     }
 
-    public float getUniversityAverageMark(String subjectName) throws FacultyHasNoGroupsException, StudentHasNoSubjectsException, MarkIsOutOfBoundException {
-        mapOfFaculties.entrySet().stream().map(Map.Entry::getValue);
+    public float getUniversityAverageMark(String subjectName) throws FacultyHasNoGroupsException, StudentHasNoSubjectsException, MarkIsOutOfBoundException, UniversityHasNoFacultiesException {
+        if (mapOfFaculties.isEmpty()) {
+            throw new UniversityHasNoFacultiesException(this.universityName+" university has no faculties!");
+        }
         Map<Integer, Group> mapOfAllGroups = new HashMap<>();
         for (Faculty faculty : mapOfFaculties.values()) {
             mapOfAllGroups.putAll(faculty.getMapOfFacultyGroups());

@@ -7,12 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Faculty {
+
     private FacultyName facultyName;
     private Map<Integer, Group> mapOfFacultyGroups = new HashMap<>();
 
     public Map<Integer, Group> getMapOfFacultyGroups() throws FacultyHasNoGroupsException {
         if (mapOfFacultyGroups.isEmpty()) {
-            throw new FacultyHasNoGroupsException();
+            throw new FacultyHasNoGroupsException(this.facultyName+" faculty has no groups!");
         }
         return mapOfFacultyGroups;
     }

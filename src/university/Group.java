@@ -18,7 +18,7 @@ public class Group {
 
     public HashMap<String, Student> getStudentsOfGroup() throws GroupHasNoStudentsException {
         if (studentsOfGroup.isEmpty()) {
-            throw new GroupHasNoStudentsException();
+            throw new GroupHasNoStudentsException("Group " + this.groupNumber + " has no students!");
         }
         return studentsOfGroup;
     }

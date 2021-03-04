@@ -10,11 +10,10 @@ public class Student {
     private String studentName;
     private String studentSurname;
     private HashMap<String, Integer> listOfSubjects = new HashMap();
-    private int studentAverageMark;
 
     public HashMap<String, Integer> getListOfSubjects() throws StudentHasNoSubjectsException {
         if (listOfSubjects.isEmpty()){
-            throw new StudentHasNoSubjectsException();
+            throw new StudentHasNoSubjectsException(this.studentName+" "+this.studentSurname+" has no subjects!");
         }
         return listOfSubjects;
     }
@@ -63,8 +62,7 @@ public class Student {
             totalSumOfMarks += mark;
             quantityOfStudentsSubjects++;
         }
-        studentAverageMark = totalSumOfMarks / quantityOfStudentsSubjects;
-        return studentAverageMark;
+        return totalSumOfMarks / quantityOfStudentsSubjects;
     }
 
     @Override
