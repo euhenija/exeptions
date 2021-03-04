@@ -5,7 +5,7 @@ import university.*;
 import java.util.HashMap;
 
 public class Main {
-    public static void main(String[] args) throws FacultyHasNoGroupsException, GroupHasNoStudentsException, UniversityHasNoFacultiesException, MarkIsOutOfBoundException, StudentHasNoSubjectsException {
+    public static void main(String[] args) throws UniversityHasNoFacultiesException, MarkIsOutOfBoundException, FacultyHasNoGroupsException, GroupHasNoStudentsException, StudentHasNoSubjectsException {
 
         HashMap<String, Student> students1 = new HashMap<>();
         students1.put("Red", new Student.StudentBuilder().withStudentName("Rick").withStudentSurname("Red").withSubjectAndItsMark("HISTORY", 5).withSubjectAndItsMark("LITERATURE", 9).build());
@@ -40,7 +40,7 @@ public class Main {
         historicalFaculty.addGroupToFaculty(125, group125);
         telecomFaculty.addGroupToFaculty(224, group224);
         telecomFaculty.addGroupToFaculty(225, group225);
-        telecomFaculty.addGroupToFaculty(226, group226);
+         telecomFaculty.addGroupToFaculty(226, group226);
 
         HashMap<String, Faculty> listOfFaculties = new HashMap<>();
         listOfFaculties.put("Historical", historicalFaculty);
@@ -57,7 +57,7 @@ public class Main {
         System.out.println("Average mark from asked group is Count from class UNIVERSITY: " + universityBSU.getAverageMarkOfGroup("Historical", 125, "HISTORY"));
         System.out.println("Average mark from asked group is: " + universityBSU.getAverageMarkOfGroup("Historical", 125, "HISTORY"));
         System.out.println("Average mark of student is: " + universityBSU.getStudentAverageMark("Red"));
-        System.out.println("Average University mark is: " + universityBNTU.getUniversityAverageMark("LITERATURE"));
+        System.out.println("Average University mark is: " + universityBSU.getUniversityAverageMark("LITERATURE"));
         System.out.println("Average mark of student is: " + universityBSU.getStudentAverageMark("Red"));
 
     }

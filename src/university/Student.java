@@ -3,7 +3,9 @@ package university;
 import exceptions.Inspector;
 import exceptions.MarkIsOutOfBoundException;
 import exceptions.StudentHasNoSubjectsException;
+
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class Student {
@@ -12,8 +14,8 @@ public class Student {
     private HashMap<String, Integer> listOfSubjects = new HashMap();
 
     public HashMap<String, Integer> getListOfSubjects() throws StudentHasNoSubjectsException {
-        if (listOfSubjects.isEmpty()){
-            throw new StudentHasNoSubjectsException(this.studentName+" "+this.studentSurname+" has no subjects!");
+        if (listOfSubjects.isEmpty()) {
+            throw new StudentHasNoSubjectsException(this.studentName + " " + this.studentSurname + " has no subjects!");
         }
         return listOfSubjects;
     }

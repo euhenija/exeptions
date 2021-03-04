@@ -1,13 +1,15 @@
 package university;
 
 import exceptions.*;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.ToLongFunction;
 
 public class University {
 
     private String universityName;
-    private HashMap<String, Faculty> mapOfFaculties;
+    private Map<String, Faculty> mapOfFaculties;
 
     public University(String universityName) {
         this.universityName = universityName;
@@ -21,34 +23,54 @@ public class University {
         this.universityName = universityName;
     }
 
-    public HashMap<String, Faculty> getMapOfFaculties() throws UniversityHasNoFacultiesException {
+    public Map<String, Faculty> getMapOfFaculties() {
         return mapOfFaculties;
     }
 
-    public void setFacultiesToUniversity(HashMap<String, Faculty> university) {
+    public void setFacultiesToUniversity(Map<String, Faculty> university) {
         this.mapOfFaculties = university;
     }
 
-    public float getUniversityAverageMark(String subjectName) throws FacultyHasNoGroupsException, StudentHasNoSubjectsException, MarkIsOutOfBoundException, UniversityHasNoFacultiesException {
+    public double getUniversityAverageMark(String subjectName) throws UniversityHasNoFacultiesException {
         if (mapOfFaculties.isEmpty()) {
-            throw new UniversityHasNoFacultiesException(this.universityName+" university has no faculties!");
+            throw new UniversityHasNoFacultiesException(this.universityName + " university has no faculties!");
         }
-        Map<Integer, Group> mapOfAllGroups = new HashMap<>();
-        for (Faculty faculty : mapOfFaculties.values()) {
-            mapOfAllGroups.putAll(faculty.getMapOfFacultyGroups());
-        }
-        int sumOfGroupAverageMark = 0;
-        int quantityOfGroups = 0;
-        for (Group group : mapOfAllGroups.values()) {
-            sumOfGroupAverageMark += group.getGroupAverageMark(subjectName);
-            quantityOfGroups++;
-        }
+
+
+        ToLongFunction<Group> function = group -> {
+            try {
+                return group.getGroupAverageMark(subjectName);
+            } catch (StudentHasNoSubjectsException | MarkIsOutOfBoundException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        };
+
+        long sumOfGroupAverageMark = mapOfFaculties.values().stream().mapToLong(faculty -> {
+            try {
+                System.out.println("SUM Group" + faculty.getMapOfFacultyGroups().values().stream().mapToLong(function).sum());
+                return faculty.getMapOfFacultyGroups().values().stream().mapToLong(function).sum();
+            } catch (FacultyHasNoGroupsException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }).sum();
+     long quantityOfGroups = mapOfFaculties.values().stream().mapToLong(faculty -> {
+            try {
+                System.out.println("Number of groups" + faculty.getMapOfFacultyGroups().values().size());
+                return faculty.getMapOfFacultyGroups().values().size();
+            } catch (FacultyHasNoGroupsException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }).sum();
+
+
         return sumOfGroupAverageMark / quantityOfGroups;
     }
 
     public int getAverageMarkOfGroup(String facultyName, int groupNumber, String subject) throws FacultyHasNoGroupsException, StudentHasNoSubjectsException, MarkIsOutOfBoundException {
-        Group group = mapOfFaculties.get(facultyName).getMapOfFacultyGroups().get(groupNumber);
-        return group.getGroupAverageMark(subject);
+        return mapOfFaculties.get(facultyName).getMapOfFacultyGroups().get(groupNumber).getGroupAverageMark(subject);
     }
 
     public float getStudentAverageMark(String studentSurname) throws FacultyHasNoGroupsException, GroupHasNoStudentsException, MarkIsOutOfBoundException {
