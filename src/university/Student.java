@@ -3,10 +3,7 @@ package university;
 import exceptions.Inspector;
 import exceptions.MarkIsOutOfBoundException;
 import exceptions.StudentHasNoSubjectsException;
-
 import java.util.HashMap;
-import java.util.Map;
-
 
 public class Student {
     private String studentName;

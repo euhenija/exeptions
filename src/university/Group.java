@@ -4,7 +4,6 @@ import exceptions.GroupHasNoStudentsException;
 import exceptions.Inspector;
 import exceptions.MarkIsOutOfBoundException;
 import exceptions.StudentHasNoSubjectsException;
-
 import java.util.HashMap;
 
 public class Group {

@@ -1,7 +1,6 @@
 import enums.FacultyName;
 import exceptions.*;
 import university.*;
-
 import java.util.HashMap;
 
 public class Main {
@@ -40,7 +39,7 @@ public class Main {
         historicalFaculty.addGroupToFaculty(125, group125);
         telecomFaculty.addGroupToFaculty(224, group224);
         telecomFaculty.addGroupToFaculty(225, group225);
-         telecomFaculty.addGroupToFaculty(226, group226);
+        telecomFaculty.addGroupToFaculty(226, group226);
 
         HashMap<String, Faculty> listOfFaculties = new HashMap<>();
         listOfFaculties.put("Historical", historicalFaculty);
