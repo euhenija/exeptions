@@ -1,7 +1,7 @@
 package university;
 
 import exceptions.GroupHasNoStudentsException;
-import exceptions.Inspector;
+import helpers.Inspector;
 import exceptions.MarkIsOutOfBoundException;
 import exceptions.StudentHasNoSubjectsException;
 import java.util.HashMap;

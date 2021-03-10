@@ -1,4 +1,6 @@
-package exceptions;
+package helpers;
+
+import exceptions.MarkIsOutOfBoundException;
 
 public class Inspector {
 
